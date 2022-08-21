@@ -260,7 +260,7 @@ def editarusuario(id):
             usuario.telefone = request.form.get("telefone")
             db.session.add(usuario)
             db.session.commit()
-            return redirect(url_for("usuario"))
+            return redirect(url_for("index"))
         return render_template("user_editar.html", usuario = usuario)
     else:
         return redirect(url_for("index"))
