@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>Só Negócio - {{usuarios.nome}}</title>
+    <link rel="stylesheet" href="../../static/css/bootstrap.css">
+    <link rel="stylesheet" href="../../static/css/style.css">
+</head>
+<body>
+    <header>
+        <nav class="navbar navbar-expand-lg navbar-dark" style="background-color:darkcyan;">
+            <a class="navbar-brand" href={{ url_for("index") }}>Só Negócio</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#conteudoNavbarSuportado" aria-controls="conteudoNavbarSuportado" aria-expanded="false" aria-label="Alterna navegação">
+            <span class="navbar-toggler-icon"></span>
+            </button>
+        
+            <div class="collapse navbar-collapse" id="conteudoNavbarSuportado">
+            <ul class="navbar-nav mx-auto">
+                <li class="nav-item">
+                <a class="nav-link" href={{ url_for("index") }}>Página Inicial</a>
+                </li>
+                {% if current_user.id == 1 %}
+                    <li class="nav-item">
+                    <a class="nav-link" href={{ url_for("adm") }}>Funções ADM</a>
+                    </li>
+                {% endif %}
+                <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    Cadastros
+                </a>
+                <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                    {% if not current_user.id %}
+                        <a class="dropdown-item" href={{ url_for("usuario") }}>Usuário</a>
+                    {% else %}
+                        <a class="dropdown-item" href={{ url_for("editarusuario",id=current_user.id) }}>Editar Usuário</a>
+                    {% endif %}
+                    <div class="dropdown-divider"></div>
+                    <a class="dropdown-item" href={{ url_for("anuncio") }}>Anúncio</a>
+                    {% if current_user.id == 1 %}
+                        <div class="dropdown-divider"></div>
+                        <a class="dropdown-item" href={{ url_for("categoria") }}>Categorias</a>
+                    {% endif %}
+                </div>
+                </li>
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        Anúncios
+                    </a>
+                    <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                        <a class="dropdown-item" href={{ url_for("pergunta") }}>Perguntas e Respostas</a>
+                        <div class="dropdown-divider"></div>
+                        <a class="dropdown-item" href={{ url_for("favoritos") }}>Favoritos</a>
+                        <div class="dropdown-divider"></div>
+                        <a class="dropdown-item" href={{ url_for("meusanuncios") }}>Meus Anúncios</a>
+                    </div>
+                </li>
+                <li class="nav-item dropdown" style="margin-right: 100px;">
+                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        Relatórios
+                    </a>
+                    <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                        <a class="dropdown-item" href={{ url_for("relCompras") }}>Compras</a>
+                        <div class="dropdown-divider"></div>
+                        <a class="dropdown-item" href={{ url_for("relVendas") }}>Vendas</a>
+                    </div>
+                </li>
+                <li class="nav-tem">
+                    <p style="color:white;">
+                        Olá {{ current_user.nome}}! Seja bem vindo!
+                        <a href={{ url_for("logout") }} class="btn btn-secondary">logout</a>
+                    </p>
+                </li>
+            </ul>
+            </div>
+        </nav>
+    </header>
+    <main class="container">
+        <h3>Detalhes do usuário: {{usuarios.nome}}</h3>
+        <table class="table table-striped">
+        <thead>
+            <tr>
+                <th scope="col">ID</th>
+                <th scope="col">Nome</th>
+                <th scope="col">E-mail</th>
+                <th scope="col">Endereço</th>
+                <th scope="col">Telefone</th>
+                <th scope="col">Editar</th>
+                <th scope="col">Excluir</th>
+            </tr>
+        </thead>
+        <tbody>
+                <tr>
+                    <td>{{usuarios.id}}</td>
+                    <td>{{usuarios.nome}}</td>
+                    <td>{{usuarios.email}}</td>
+                    <td>{{usuarios.end}}</td>
+                    <td>{{usuarios.telefone}}</td>
+                    <td><a href={{ url_for("editarusuario",id=usuarios.id) }}><img src="../../static/img/caneta.png" height="30" width="30"></a></td>
+                    <td><a href={{ url_for("deletarusuario",id=usuarios.id) }}><img src="../../static/img/excluir.png" height="30" width="30"></a></td>
+                </tr>
+        </tbody>
+        </table>
+
+    </main>
+    <footer>
+        <p style="color:white">Todos os direitos reservados © Gabriel Badaró</p>
+
+    </footer>
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
+    <script src="../../static/js/bootstrap.min.js"></script>
+</body>
+</html>

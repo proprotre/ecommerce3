@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>Só Negócio - Perguntar</title>
+        <link rel="stylesheet" href="../../static/css/bootstrap.css">
+        <link rel="stylesheet" href="../../static/css/style.css">
+    </head>
+    <body>
+        <header>
+            <nav class="navbar navbar-expand-lg navbar-dark" style="background-color:darkcyan;">
+                <a class="navbar-brand" href={{ url_for("index") }}>Só Negócio</a>
+                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#conteudoNavbarSuportado" aria-controls="conteudoNavbarSuportado" aria-expanded="false" aria-label="Alterna navegação">
+                <span class="navbar-toggler-icon"></span>
+                </button>
+            
+                <div class="collapse navbar-collapse" id="conteudoNavbarSuportado">
+                <ul class="navbar-nav mx-auto">
+                    <li class="nav-item">
+                    <a class="nav-link" href={{ url_for("index") }}>Página Inicial</a>
+                    </li>
+                    {% if current_user.id == 1 %}
+                        <li class="nav-item">
+                        <a class="nav-link" href={{ url_for("adm") }}>Funções ADM</a>
+                        </li>
+                    {% endif %}
+                    <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        Cadastros
+                    </a>
+                    <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                        {% if not current_user.id %}
+                            <a class="dropdown-item" href={{ url_for("usuario") }}>Usuário</a>
+                        {% else %}
+                            <a class="dropdown-item" href={{ url_for("editarusuario",id=current_user.id) }}>Editar Usuário</a>
+                        {% endif %}
+                        <div class="dropdown-divider"></div>
+                        <a class="dropdown-item" href={{ url_for("anuncio") }}>Anúncio</a>
+                        {% if current_user.id == 1 %}
+                            <div class="dropdown-divider"></div>
+                            <a class="dropdown-item" href={{ url_for("categoria") }}>Categorias</a>
+                        {% endif %}
+                    </div>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            Anúncios
+                        </a>
+                        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                            <a class="dropdown-item" href={{ url_for("pergunta") }}>Perguntas e Respostas</a>
+                            <div class="dropdown-divider"></div>
+                            <a class="dropdown-item" href={{ url_for("favoritos") }}>Favoritos</a>
+                            <div class="dropdown-divider"></div>
+                            <a class="dropdown-item" href={{ url_for("meusanuncios") }}>Meus Anúncios</a>
+                        </div>
+                    </li>
+                    <li class="nav-item dropdown" style="margin-right: 100px;">
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            Relatórios
+                        </a>
+                        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                            <a class="dropdown-item" href={{ url_for("relCompras") }}>Compras</a>
+                            <div class="dropdown-divider"></div>
+                            <a class="dropdown-item" href={{ url_for("relVendas") }}>Vendas</a>
+                        </div>
+                    </li>
+                    <li class="nav-tem">
+                        <p style="color:white;">
+                            Olá {{ current_user.nome}}! Seja bem vindo!
+                            <a href={{ url_for("logout") }} class="btn btn-secondary">logout</a>
+                        </p>
+                    </li>
+                </ul>
+                </div>
+            </nav>
+        </header>
+        <main>
+            <h1>Faça sua pergunta!</h1>
+            <div class="container">
+                <div class="row">
+                    <div class="col" style="margin-top: 10px;">
+                        <div class="card" style="width: 18rem;">
+                            <div>
+                                <p class="favorito"><a href="/favoritos/criar/{{anuncio.id}}"><img src="../../static/img/favorito.png" height="30" width="30"></a></p>
+                                <img class="card-img-top" src="../../static/img/trade.jpg" height="180px" width="100px">
+                            </div>
+                            <div class="card-body" style="text-align:center;">
+                                <h5 class="card-title">{{anuncio.id}} - {{anuncio.nome}}</h5>
+                                <p class="card-text">{{anuncio.desc}}</p>
+                                {% if anuncio.qtd > 0 %}
+                                    <p class="card-text">Quantidade disponível: {{anuncio.qtd}}</p>
+                                    <p class="card-text">Valor R${{'%0.2f'|format(anuncio.preco|float)}} unidade</p>
+                                    <a href="/anunc/comprar/{{anuncio.id}}" class="btn btn-success">comprar</a>
+                                {% else %}
+                                    <p class="card-text">Anúncio indisponível!</p>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col" style="margin-top: 10px;">
+                        <form action="/anunc/pergunta/criar/{{anuncio.id}}" method="post">
+                            <div class="form-group">
+                                <label for="pergunta">Digite sua pergunta</label>
+                                <textarea class="form-control" id="pergunta" name="pergunta" placeholder="Escreva sua pergunta aqui" rows="2"></textarea>
+                            </div>
+                            <div class="form-group" style="text-align: center;">
+                                <input type="submit" value="perguntar" class="btn btn-secondary">
+                            </div>
+                        </form>                    
+                    </div>
+                </div>
+            </div>
+        </main>
+        <footer>
+            <p style="color:white">Todos os direitos reservados © Gabriel Badaró</p>
+    
+        </footer>
+
+        <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
+        <script src="../../static/js/bootstrap.min.js"></script>
+    </body>
+</html>
